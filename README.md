@@ -25,7 +25,7 @@ sudo apt-get update && sudo apt-get install -y wget xorriso isolinux syslinux-co
 
 Create a dedicated working folder in your home directory called 'unattended'
 ```bash
-mkdir unattended
+mkdir ~/unattended
 ```
 Then change to that directory.
 ```bash
@@ -83,7 +83,7 @@ You can run:
 ```bash
 ls -lh
 ```
-on that dir and you should see your new ISO file.
+In that directory and you should see your new ISO file.
 
 ## Write the new ISO to a USB Drive
 
