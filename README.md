@@ -61,12 +61,13 @@ Copy the text of the preseed.cfg into nano and include your changes such as user
 Then CTRL+O to save, and CTRL+X to exit nano
 
 Next you will then need to create two other files in the same manner with nano that I have listed below.
+
+## Create the ISO Build Script
+
 ```bash
 nano build_unattended_iso.sh
 ```
 Here is the link to the code for [build_unattended_iso.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/build_unattended_iso.sh)
-
-
 
 ## Build the unattended ISO
 
