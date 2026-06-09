@@ -122,6 +122,7 @@ Once you have the USB plugged in and you have the script corrected to the right 
 ```bash
 sudo bash write.sh
 ```
+## Use the USB to Install OS
 
 Now plug your USB into the machine you want to install Debian onto and start it up, 
 once it boots in choose the second option "Install" and just wait, when it finishes, 
