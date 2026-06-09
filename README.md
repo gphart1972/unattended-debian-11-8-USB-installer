@@ -13,6 +13,7 @@ You will install a few tools to your working machine.
 - genisoimage
 - parted
 - dosfstools
+- rsync (comes installed with Debian 11)
 
 You can install them all with this command:
 
@@ -25,6 +26,10 @@ sudo apt-get update && sudo apt-get install -y wget xorriso isolinux syslinux-co
 Create a dedicated working folder in your home directory called 'unattended'
 ```bash
 mkdir unattended
+```
+Then chane to that directory.
+```bash
+cd ~/unattended
 ```
 
 This folder will hold the files used in this project:
@@ -47,7 +52,7 @@ wget https://cdimage.debian.org/cdimage/archive/11.8.0/amd64/iso-cd/debian-11.8.
 While you are still in the 'unattended' working directory:
 
 ```bash
-sudo nano preseed.cfg
+nano preseed.cfg
 ```
 Here is the link to the [preseed.cfg](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/preseed.cfg)
 
@@ -57,7 +62,7 @@ Then CTRL+O to save, and CTRL+X to exit nano
 
 Next you will then need to create two other files in the same manner with nano that I have listed below.
 ```bash
-sudo nano build_unattended_iso.sh
+nano build_unattended_iso.sh
 ```
 Here is the link to the code for [build_unattended_iso.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/build_unattended_iso.sh)
 
@@ -73,7 +78,11 @@ sudo bash build_unattended_iso.sh
 
 This should not take long and then it finishes.
 
-You can run ls on that dir and you should see you new ISO file.
+You can run:
+```bash
+/ls -lh
+```
+on that dir and you should see you new ISO file.
 
 ## Write the new ISO to a USB Drive
 
@@ -96,14 +105,14 @@ NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUS
 ```
 You can see above that the USB drive is at "/dev/sdc" 
 
-Below is a script that deletes all data on the USB, makes a partition, formats the drive and copies the ISO to the USB and makes it bootable in the process.
-Make sure you have the USB_DEV part at the top part of the script match your USB drive.
-You run this script in the same folder as your new ISO file
-
 ## Create the write.sh script
 
+Below is a script that deletes all data on the USB, makes a partition, formats the drive and copies the ISO to the USB and makes it bootable in the process.
+Make sure you have the USB_DEV part at the top part of the script match your USB drive.
+You run this script in the same folder as your new ISO file.
+
 ```bash
-sudo nano write.sh
+nano write.sh
 ```
 Here is the code for [write.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/write.sh)
 
