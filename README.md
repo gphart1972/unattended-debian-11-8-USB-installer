@@ -24,7 +24,7 @@ sudo apt-get update && sudo apt-get install -y wget xorriso isolinux syslinux-co
 
 Create a dedicated working folder in your home directory called 'unattended'
 ```bash
-sudo mkdir unattended
+mkdir unattended
 ```
 
 This folder will hold the files used in this project:
