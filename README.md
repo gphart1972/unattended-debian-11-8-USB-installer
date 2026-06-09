@@ -27,7 +27,7 @@ Create a dedicated working folder in your home directory called 'unattended'
 ```bash
 mkdir unattended
 ```
-Then chane to that directory.
+Then change to that directory.
 ```bash
 cd ~/unattended
 ```
@@ -80,9 +80,9 @@ This should not take long and then it finishes.
 
 You can run:
 ```bash
-/ls -lh
+ls -lh
 ```
-on that dir and you should see you new ISO file.
+on that dir and you should see your new ISO file.
 
 ## Write the new ISO to a USB Drive
 
