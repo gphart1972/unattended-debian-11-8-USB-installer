@@ -24,11 +24,11 @@ mkdir -p "$WORKDIR/preseed"
 cp preseed.cfg "$WORKDIR/preseed/custom.cfg"
 
 echo ">>> Patching isolinux/txt.cfg..."
-sed -i 's@append .*@append auto=true priority=critical vga=788 initrd=/install.amd/initrd.gz pr>
+sed -i 's@append .*@append auto=true priority=critical vga=788 initrd=/install.amd/initrd.gz preseed/file=/cdrom/preseed/custom.cfg ---@' \
     "$WORKDIR/isolinux/txt.cfg"
 
 echo ">>> Patching GRUB config..."
-sed -i 's@linux.*@linux /install.amd/vmlinuz auto=true priority=critical preseed/file=/cdrom/pr>
+sed -i 's@linux.*@linux /install.amd/vmlinuz auto=true priority=critical preseed/file=/cdrom/preseed/custom.cfg ---@' \
     "$WORKDIR/boot/grub/grub.cfg"
 
 echo ">>> Rebuilding ISO..."
