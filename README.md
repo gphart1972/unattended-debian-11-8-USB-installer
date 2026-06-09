@@ -16,14 +16,14 @@ You will install a few tools to your working machine.
 
 You can install them all with this command:
 
-```code
+```bash
 sudo apt-get update && sudo apt-get install -y wget xorriso isolinux syslinux-common genisoimage parted dosfstools
 ```
 
 ## Setup your workspace
 
 Create a dedicated working folder in your home directory called 'unattended'
-```code
+```bash
 sudo mkdir unattended
 ```
 
@@ -39,14 +39,14 @@ This folder will hold the files used in this project:
 
 Next you will need the Debian ISO downloaded into your "unattended" working directory, so in terminal from that directory run
 
-```code
+```bash
 wget https://cdimage.debian.org/cdimage/archive/11.8.0/amd64/iso-cd/debian-11.8.0-amd64-netinst.iso
 ```
 ## Make and edit the preseed.cfg file
 
 While you are still in the 'unattended' working directory:
 
-```code
+```bash
 sudo nano preseed.cfg
 ```
 Here is the link to the [preseed.cfg](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/preseed.cfg)
@@ -56,7 +56,7 @@ Copy the text of the preseed.cfg into nano and include your changes such as user
 Then CTRL+O to save, and CTRL+X to exit nano
 
 Next you will then need to create two other files in the same manner with nano that I have listed below.
-```code
+```bash
 sudo nano build_unattended_iso.sh
 ```
 Here is the link to the code for [build_unattended_iso.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/build_unattended_iso.sh)
@@ -67,7 +67,7 @@ Here is the link to the code for [build_unattended_iso.sh](https://github.com/gp
 
 Now if you have made your changes to the preseed.cfg file and you have made the 'build_unattended_iso.sh' script you are ready to run the script and make the unattended ISO
 
-```code
+```bash
 sudo bash build_unattended_iso.sh
 ```
 
@@ -79,11 +79,11 @@ You can run ls on that dir and you should see you new ISO file.
 
 Next plug in the USB that you want to make into the unattended installer and run:
 
-```code
+```bash
 lsblk -fp
 ```
 Output will look something like this
-```
+```bash
 user@hostname:~/unattended$ lsblk -fp
 NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
 /dev/sda
@@ -102,14 +102,14 @@ You run this script in the same folder as your new ISO file
 
 ## Create the write.sh script
 
-```code
+```bash
 sudo nano write.sh
 ```
 Here is the code for [write.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/write.sh)
 
 Once you have the USB plugged in and you have the script corrected to the right device name, you can run it like this:
 
-```code
+```bash
 sudo bash write.sh
 ```
 
