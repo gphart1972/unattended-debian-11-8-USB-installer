@@ -35,77 +35,6 @@ This folder will hold the files used in this project:
 - write.sh
 - debian-11.8.0-unattended.iso (once you make it)
 
-
-## Make and edit the preseed.cfg file
-
-Change directory to your working directory and execute:
-
-```code
-sudo nano preseed.cfg
-```
-
-Copy the text of the preseed.cfg show in this repo into there and include your changes such as username, password, hostname, static IP info etc...
-
-Then CTRL+O to save, and CTRL+X to exit nano
-
-Next you will then need to create two other files in the same manner with nano that I have listed below.
-```
-sudo nano build_unattended_iso.sh
-```
-The first one is the script(build_unattended_iso.sh) used to build the ISO file, it will use the ISO file you download from Debian, include the preseed.cfg file as well as a few other changes and then make a working ISO file
-
-```code
-####################################
-build_unattended_iso.sh
-####################################
-#!/bin/bash
-set -e
-
-ISO_IN="debian-11.8.0-amd64-netinst.iso"
-ISO_OUT="debian-11.8.0-unattended.iso"
-WORKDIR="iso_work"
-MNTDIR="iso_mnt"
-
-# Clean old dirs
-sudo rm -rf "$WORKDIR" "$MNTDIR"
-mkdir -p "$WORKDIR" "$MNTDIR"
-
-echo ">>> Mounting original ISO..."
-sudo mount -o loop "$ISO_IN" "$MNTDIR"
-
-echo ">>> Copying ISO contents..."
-rsync -a "$MNTDIR/" "$WORKDIR/"
-
-echo ">>> Unmounting ISO..."
-sudo umount "$MNTDIR"
-
-echo ">>> Injecting preseed..."
-mkdir -p "$WORKDIR/preseed"
-cp preseed.cfg "$WORKDIR/preseed/custom.cfg"
-
-echo ">>> Patching isolinux/txt.cfg..."
-sed -i 's@append .*@append auto=true priority=critical vga=788 initrd=/install.amd/initrd.gz pr>
-    "$WORKDIR/isolinux/txt.cfg"
-
-echo ">>> Patching GRUB config..."
-sed -i 's@linux.*@linux /install.amd/vmlinuz auto=true priority=critical preseed/file=/cdrom/pr>
-    "$WORKDIR/boot/grub/grub.cfg"
-
-echo ">>> Rebuilding ISO..."
-xorriso -as mkisofs \
-  -o "$ISO_OUT" \
-  -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
-  -c isolinux/boot.cat \
-  -b isolinux/isolinux.bin \
-     -no-emul-boot -boot-load-size 4 -boot-info-table \
-  -eltorito-alt-boot \
-  -e boot/grub/efi.img \
-     -no-emul-boot \
-  "$WORKDIR"
-
-echo ">>> Done!"
-echo "Output ISO: $ISO_OUT"
-```
 ## Get the Debian ISO file
 
 Next you will need the Debian ISO downloaded into your "unattended" working directory, so in terminal from that directory run
@@ -113,6 +42,26 @@ Next you will need the Debian ISO downloaded into your "unattended" working dire
 ```code
 wget https://cdimage.debian.org/cdimage/archive/11.8.0/amd64/iso-cd/debian-11.8.0-amd64-netinst.iso
 ```
+## Make and edit the preseed.cfg file
+
+While you are still in the 'unattended' working directory:
+
+```code
+sudo nano preseed.cfg
+```
+Here is the link to the [preseed.cfg](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/preseed.cfg)
+
+Copy the text of the preseed.cfg into nano and include your changes such as username, password, hostname, static IP info etc...
+
+Then CTRL+O to save, and CTRL+X to exit nano
+
+Next you will then need to create two other files in the same manner with nano that I have listed below.
+```code
+sudo nano build_unattended_iso.sh
+```
+Here is the link to the code for [build_unattended_iso.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/build_unattended_iso.sh)
+
+
 
 ## Build the unattended ISO
 
@@ -156,38 +105,8 @@ You run this script in the same folder as your new ISO file
 ```code
 sudo nano write.sh
 ```
-Copy and past the code below into nano and save/exit.
+Here is the code for [write.sh](https://github.com/gphart1972/unattended-debian-11-8-USB-installer/blob/main/write.sh)
 
-```code
-#######################################
-write.sh
-#######################################
-#!/bin/bash
-set -e
-
-USB_DEV="/dev/sdc"
-ISO_FILE="debian-11.8.0-unattended.iso"
-
-echo ">>> WARNING: This will erase ${USB_DEV} completely."
-read -p "Press ENTER to continue or CTRL+C to abort."
-
-echo ">>> Wiping filesystem signatures..."
-sudo wipefs -a ${USB_DEV}
-
-echo ">>> Creating new msdos partition table..."
-sudo parted ${USB_DEV} --script mklabel msdos
-
-echo ">>> Creating primary FAT32 partition..."
-sudo parted ${USB_DEV} --script mkpart primary fat32 1MiB 100%
-
-echo ">>> Formatting partition as FAT32..."
-sudo mkfs.vfat -F 32 ${USB_DEV}1
-
-echo ">>> Writing ISO to USB (this will take a moment)..."
-sudo dd if="${ISO_FILE}" of=${USB_DEV} bs=4M status=progress oflag=sync
-
-echo ">>> Done. USB is ready."
-```
 Once you have the USB plugged in and you have the script corrected to the right device name, you can run it like this:
 
 ```code
