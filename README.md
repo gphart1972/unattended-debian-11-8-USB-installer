@@ -6,15 +6,13 @@ Everything in this guide is performed on a Debian 11.8 (Bullseye) machine that y
 
 You will install a few tools to your working machine.
 
-```code
-wget
-xorriso
-isolinux
-syslinux-common
-genisoimage
-parted
-dosfstools
-```
+- wget
+- xorriso
+- isolinux
+- syslinux-common
+- genisoimage
+- parted
+- dosfstools
 
 You can install them all with this command:
 
@@ -25,19 +23,18 @@ sudo apt-get update && sudo apt-get install -y wget xorriso isolinux syslinux-co
 ## Setup your workspace
 
 Create a dedicated working folder in your home directory called 'unattended'
+```code
+sudo mkdir unattended
+```
 
 This folder will hold the files used in this project:
-```
--debian-11.8.0-amd64-netinst.iso
 
--preseed.cfg
+- debian-11.8.0-amd64-netinst.iso
+- preseed.cfg
+- build_unattended_iso.sh
+- write.sh
+- debian-11.8.0-unattended.iso (once you make it)
 
--build_unattended_iso.sh
-
--write.sh
-
--debian-11.8.0-unattended.iso (once you make it)
-```
 
 ## Make and edit the preseed.cfg file
 
@@ -52,7 +49,9 @@ Copy the text of the preseed.cfg show in this repo into there and include your c
 Then CTRL+O to save, and CTRL+X to exit nano
 
 Next you will then need to create two other files in the same manner with nano that I have listed below.
-
+```
+sudo nano build_unattended_iso.sh
+```
 The first one is the script(build_unattended_iso.sh) used to build the ISO file, it will use the ISO file you download from Debian, include the preseed.cfg file as well as a few other changes and then make a working ISO file
 
 ```code
@@ -134,9 +133,30 @@ Next plug in the USB that you want to make into the unattended installer and run
 ```code
 lsblk -fp
 ```
-this should show you your USB device and it will like have the name sdc or sdc1
+Output will look something like this
+```
+user@hostname:~/unattended$ lsblk -fp
+NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+/dev/sda
+/dev/sdb
+├─/dev/sdb1 vfat   FAT32       1149-18DE                             505.2M     1% /boot/efi
+├─/dev/sdb2 ext4   1.0         fb5ef8aa-cd52-486d-af28-a1fe824034db  440.4G     1% /
+└─/dev/sdb3 swap   1           7a6f13e3-a157-4861-939a-d07eb0cf318f                [SWAP]
+/dev/sdc
+└─/dev/sdc1 ntfs         <volume_label> CAF63F34F63F205D
+```
+You can see above that the USB drive is at "/dev/sdc" 
 
-anyhow, below is a script, make sure you have the USB_DEV part at the top setup with your device name, if you run this script in the same folder as your new ISO file, it will copy the ISO to the USB in a way that it will be bootable.
+Below is a script that deletes all data on the USB, makes a partition, formats the drive and copies the ISO to the USB and makes it bootable in the process.
+Make sure you have the USB_DEV part at the top part of the script match your USB drive.
+You run this script in the same folder as your new ISO file
+
+## Create the write.sh script
+
+```code
+sudo nano write.sh
+```
+Copy and past the code below into nano and save/exit.
 
 ```code
 #######################################
